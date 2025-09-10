@@ -64,7 +64,8 @@ clear_screen()
 Write a program that prints your Python version and platform using the sys and platform modules.
 '''
 # enter your code here
- 
+import platform
+import sys
 
 pause=input('pause')
 clear_screen()
@@ -212,6 +213,7 @@ for i in range(5):
 print("numbers: " + numbers)
 print("total: " + total)
 print("average: " + average)
+
 
 pause=input('pause')
 clear_screen()
