@@ -5,6 +5,16 @@ from classes.week00.second_class.utils import clear_screen
 Write down the steps a program would need to make a cup of tea. Then implement a Python 
 function make_tea() that prints each step.
 '''
+steps=['step1','step2','step3']
+def make_tea(myList):
+    myList[2] = "step5"
+    for item in myList:
+        print(item)
+    
+
+make_tea(steps)
+print(steps)
+
 # enter your code here
 Step1 = "boil water"
 step2 = "put tea bag in water"
@@ -28,16 +38,10 @@ Given a list [2, 4, 6, 8, 10], write a program that prints the next three number
 (the ones after 10)
 '''
 # enter your code here
-numbers = [2, 4, 6, 8, 10]
-difference = numbers[1] - numbers[0]
-lastnumber = numbers[-1]
-print("the next three numbers are:")
-for i in range(1, 4):
-    nextnumber = lastnumber + (difference * i)
-    print(nextnumber)
-
-
-
+nums = [2, 4, 6, 8, 10]
+for i in range(3):
+    next = nums[-1] + 2 + i * 2
+    print(next)
 
 
 pause=input('pause')
@@ -51,10 +55,12 @@ Write a program that asks the user for their first and last name, then prints a 
 "Hello, <first name> <last name>!"
 '''
 # enter your code here
-def greeting():
-    firstname =input("enter your first name: ")
-    lastname = input("enter your last name:")
-    print("hello" + firstname " " + lastname +"nice to meet you!")
+fname = input('please enter yur first name: ')
+lname = input('please enter your last name: ')
+fname = fname.capitalize()
+lname = lname.capitalize()
+print(f'Hello, {fname} {lname}')
+
 
 pause=input('pause')
 clear_screen()
@@ -64,8 +70,13 @@ clear_screen()
 Write a program that prints your Python version and platform using the sys and platform modules.
 '''
 # enter your code here
-import platform
 import sys
+import platform
+import pprint
+
+#pprint.pprint(dir(sys))
+print(type(sys.version))
+print(sys.version, sys.platform)
 
 pause=input('pause')
 clear_screen()
@@ -76,20 +87,29 @@ Ask the user to input two numbers. Calculate and print their sum, difference, pr
 and division (both / and //).
 '''
 # enter your code here
-num1 =input("type a number")
-num2 =input("type another number")
-sum = num1 + num2
-difference = num1 - num2
-product = num1 * num2
-quotient = num1/num2
-floor = num1//num2
-print("sum =" + sum)
-print("difference = " + difference)
-print("product = " + product)
-print("quotient = " + quotient)
-print("floor = " + floor)
-      
+txt = 'please enter an integer: '
+while True:
+    try:
+        x = int(input(txt))
+        break
+    except ValueError:
+        txt = 'follow directions, enter a number: '
 
+txt = 'please enter an integer: '
+while True:
+    try:
+        y = int(input(txt))
+        break
+    except ValueError:
+        txt = 'follow directions, enter a number: '
+
+total = x + y
+diff = x - y
+prod = x * y
+div = x / y
+flr = x // y
+
+print(total, prod, diff, div, flr)
 pause=input('pause')
 clear_screen()
 '''
@@ -98,6 +118,11 @@ clear_screen()
 Ask the user to input a sentence. Print it in uppercase, lowercase, with the first letter 
 capitalized, and split it into words.
 '''
+txt = input('please entr some text:')
+print(txt.upper())
+print(txt.lower())
+print(txt.capitalize())
+print(txt.split())
 
 # enter your code here
 sentance = input("enter a sentance: ")
@@ -118,13 +143,14 @@ Calculate the result of the following without parentheses and then with parenthe
 10 + 2 * 5 / 2 - 3 ** 2
 '''
 # enter your code here
-calc1= 3**2
-calc2= 2*5
-calc3=calc2/2
-calc4=calc3-calc1
-final=10+calc4
-print(final)
+print(10 + 2 * 5 / 2 - 3 ** 2)
 
+x = (10 + (2 * (5 / 2)) - (3 ** 2))
+
+print(x)
+
+x = 2**3**2
+print(x)
 pause=input('pause')
 clear_screen()
 '''
@@ -134,12 +160,9 @@ Create a list of your three favorite foods. Replace the second item with a new o
 then print the list.
 '''
 # enter your code here
-foods = ["burger", "sushi", "steak"]
-foods[1] = "pizza"
-print("new list: " + foods)
-
-
-
+myList =['ice cream', 'blueberries', 'cake']
+myList[1] = 'candy'
+print(myList)
 pause=input('pause')
 clear_screen()
 '''
