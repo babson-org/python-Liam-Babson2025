@@ -38,11 +38,25 @@ clear_screen()
 Ask the user for two numbers and check if both are positive, either is positive, or none is positive.
 '''
 # enter code here
-num2 = int(input("enter a number"))
-num22 = int(input("enter a number"))
-if num2 > 0 and num22 > 0:
+txt= 'please enter a number: '
+while True:
+    try:
+        num01 = int(input(txt))
+        break
+    except ValueError:
+        txtm == 'a real number'
+txt= 'please enter a number: '
+while True:
+    try:
+        num02 = int(input(txt))
+        break
+    except ValueError:
+        txtm == 'a real number'
+
+
+if num01 > 0 and num02 > 0:
     print("both")
-elif num2 > 0 or num22 > 0:
+elif num01 > 0 or num02 > 0:
     print("one is positive")
 else:
     print("neither")

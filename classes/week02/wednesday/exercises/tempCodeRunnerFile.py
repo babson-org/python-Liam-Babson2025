@@ -1,3 +1,8 @@
-list =[1,2,3,4,5]
-list.append(6)
-print(list)
+secret = ("7")
+while True:
+    guess =input("enter your guess")
+    if guess == secret:
+        print("you got it")
+        break
+    else:
+        print("try again")
