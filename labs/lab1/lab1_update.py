@@ -7,6 +7,15 @@ Instructions: Complete each part below. Save your work and commit + sync in Code
 # ==============================
 # Part 1: Draw a Diamond
 # ==============================
+'''
+In this function i am using a formula to calculate the amount of spaces before the first * 
+and between the two *s if we are not at the top or bottom of the diamond. first i use error handling
+to make sure that the user enters a odd and positive integer, otherwise the program will not work. 
+then i use floor division to find the width of the middle row, and to create a number that we use in
+the formual to calculate the distance before and between the *s. to calculate the top of the diamond 
+we start from the middle width and move down to -1 in order to create the expanding effect. for the 
+bottom part of the diamond we do the oppostite and move up from from 1 to the widest width +1.
+'''
 def draw_diamond():
     # Get valid odd number with error handling
     while True:
@@ -57,6 +66,15 @@ def draw_diamond():
 # ==============================
 # Part 2: Count Letters, Words, and Sentences
 # ==============================
+'''
+in this function i am asking the user for a block of text then creating variables for
+letters, words, and sentances to store values for later. then i use a for loop to search
+through each character in the text and use .isalpha() to count the letters. to count the sentances
+i assume that every sentance has punctuation and because of that i add a sentance if there is a
+punctuation. for words i use the .split function to seperate the words and then count the length, 
+all of these counts are stored by using += 1 and adding to the original variables we created and then
+printed out at the end.   
+'''
 def text_analysis():
     # ask user for a block of text
     text = input("Enter some text: ")
@@ -80,7 +98,17 @@ def text_analysis():
 # ==============================
 # Part 3: Caesar Cipher – Encrypt and Decrypt
 # ==============================
-
+'''
+In this program i am going to be asking the user for 3 inputs of text, 
+shift value and to encrypt or decrypt. then i will be going through each 
+character in the text and assigning a value to each character using the ord function.
+Then i will set each character to the first position by subracting "a" and then adding
+the shift value in order to encrypt the text. i aslo saved any uppercase letters in a boolean 
+so that once the text is encrypted i can keep the capitalized letters uppercase,
+the program will then print out the encrypted text and if the user wants to decrypt
+they will enter "d" and the program will run again but this time it makes the shift value
+negative so the character values reverse back to the original position. then the code repeats.
+'''
 def caesar_cipher():
     # Get user input text
     text = input("Enter text: ")
