@@ -1,0 +1,19 @@
+[
+    {
+        "id": null,
+        "fname": "Liam",
+        "lname": "Maloney",
+        "positions": [],
+        "transactions": [
+            {
+                "id": null,
+                "timestamp": "20250917-141905",
+                "type": "CONTRIBUTION",
+                "shares": 100000.0,
+                "symbol": "$$$$",
+                "name": "Cash",
+                "trn_price": 1.0
+            }
+        ]
+    }
+]
