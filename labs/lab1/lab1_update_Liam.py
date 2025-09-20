@@ -1,3 +1,17 @@
+
+'''
+Liam, I really liked what you did with this lab.  Highest Grade in class.
+
+Grade A+ (for adding that enhancement at the end of caesar)
+
+Would like to see more thought going into what you write about
+computational thinking for each problem.  I want to understand 
+how your thinking lead to the solution.
+
+so for the diamond problem where does height // 2 come from?
+how did you determine the ranges() for the two loops?
+
+'''
 """
 Lab 1 – Python Basics
 Author: Liam Maloney
