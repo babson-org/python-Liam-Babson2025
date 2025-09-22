@@ -1,0 +1,182 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# 🧪 Lab 1 Reinforcement Exercises\n",
+        "These exercises build on Lab 1 concepts: input handling, string manipulation, control flow, and basic algorithms.\n",
+        "Each problem includes a full description and a code cell for your solution."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## 🟩 Exercise 26: Longest Word Finder\n",
+        "**Problem:** Ask the user for a sentence. Identify and print the longest word. Strip punctuation from words before comparing lengths.\n",
+        "\n",
+        "**Input:**\n",
+        "- A sentence with words and punctuation\n",
+        "\n",
+        "**Output:**\n",
+        "- The longest word (punctuation removed)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "informationally\n"
+          ]
+        }
+      ],
+      "source": [
+        "txt = input(\"Enter a block of text: \")\n",
+        "words = txt.split()\n",
+        "longest_word = max(words, key=len)\n",
+        "print(longest_word)\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## 🟩 Exercise 27: Sentence Type Breakdown\n",
+        "**Problem:** Ask the user for a block of text. Count how many sentences end with `.`, `?`, and `!`. Display a breakdown of sentence types.\n",
+        "\n",
+        "**Input:**\n",
+        "- A block of text\n",
+        "\n",
+        "**Output:**\n",
+        "- Total number of sentences\n",
+        "- Number of declarative (.), interrogative (?), and exclamatory (!) sentences"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {},
+      "outputs": [
+        {
+          "ename": "SyntaxError",
+          "evalue": "invalid syntax. Perhaps you forgot a comma? (3750519945.py, line 13)",
+          "output_type": "error",
+          "traceback": [
+            "\u001b[0;36m  Cell \u001b[0;32mIn[2], line 13\u001b[0;36m\u001b[0m\n\u001b[0;31m    print(f\"Decalrative: \"{declarative})\u001b[0m\n\u001b[0m          ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m invalid syntax. Perhaps you forgot a comma?\n"
+          ]
+        }
+      ],
+      "source": [
+        "txt = input(\"Enter a block of text: \")\n",
+        "declarative = 0\n",
+        "interrogative = 0\n",
+        "exclamatory = 0\n",
+        "\n",
+        "for i in txt:\n",
+        "    if i == \".\":\n",
+        "        declarative += 1\n",
+        "    elif i == \"?\":\n",
+        "        interrogative += 1\n",
+        "    elif i == \"!\":\n",
+        "        exclamatory += 1  \n",
+        "\n",
+        "print(f\"Declarative: {declarative}\")     \n",
+        "print(f\"Interrogative: {interrogative}\")  \n",
+        "print(f\"Exclamatory: {exclamatory}\")    \n",
+        "\n",
+        "\n",
+        "\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Exercise 28: Caesar Cipher Key Finder\n",
+        "\n",
+        "Objective: Write a program to decode a message when the key is unknown, using reasoning instead of trying all shifts.\n",
+        "\n",
+        "Scenario:\n",
+        "-    You receive an encrypted message:\n",
+        "-    Encrypted message: 'KHOOR ZRUOG'\n",
+        "-    Hint: The first word is 'HELLO'\n",
+        "  \n",
+        "  \n",
+        "Tasks:\n",
+        "-    Identify the shift key\n",
+        "-    Use the hint ('HELLO') to determine the number of positions the letters were shifted.\n",
+        "-    Think: 'H' ? 'K', what shift was applied?\n",
+        "-    Decode the full message\n",
+        "-    Write a function decode_caesar(message, key) that takes the encrypted message and the key you found.\n",
+        "-    Print the decrypted message."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "def decode_caesar(message,key):\n",
+        "    key = ord(message[0])-ord(\"H\")\n",
+        "    decoded =\"\"\n",
+        "    \n",
+        "    for char in message:\n",
+        "        if char.isalpha():\n",
+        "            if char.isupper:\n",
+        "                decrypt = chr((ord(char)-ord(\"A\")- key) % 26 + ord(\"A\"))\n",
+        "            elif char.islower:\n",
+        "                decrypt = chr((ord(char)-ord(\"a\")- key) % 26 + ord(\"a\"))\n",
+        "            decoded += decrypt\n",
+        "        else: \n",
+        "            decoded += char\n",
+        "\n",
+        "    print(decoded)\n",
+        "       \n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "    "
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "venv",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.10.18"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
