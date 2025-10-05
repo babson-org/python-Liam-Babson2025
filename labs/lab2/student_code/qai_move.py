@@ -11,8 +11,8 @@ def ai_move(board: list[int]):
     """
 
 
-        for idx in range(9):
-            if abs(board[idx]) != 10: return idx
+    for idx in range(9):
+        if abs(board[idx]) != 10: return idx
 
 
     # TODO: Loop through board
