@@ -1,8 +1,11 @@
 from display_board import print_board
+
 from game_over import game_over
 from calc_score import calc_score
+
 from player_move import player_move
-from find_move import find_move, mini_max
+from ai_move import ai_move
+
 from utils import clear_screen
 import time
 
@@ -30,7 +33,7 @@ def play_game():
 
     if first_to_play == 2:
         score['player'], score['ai'] = score['ai'], score['player']
-        playerTurn = False
+        playerTurn = True
         player_win = -30
 
     while not game_over(board):
@@ -46,8 +49,8 @@ def play_game():
             print(f'{ai_name} moves')
             time.sleep(2)
 
-            XsTurn = (score['ai'] == 10)
-            move = find_move(board, XsTurn)
+            # move = find_move(board, playerTurn)
+            move = ai_move(board)
             board[move] = score['ai']
 
         playerTurn = not playerTurn
@@ -61,3 +64,6 @@ def play_game():
         print(f'I WON! I WON! the {ai_name} WON!! \n')
     else:
         print("It's a tie", '\n')
+
+
+play_game()
