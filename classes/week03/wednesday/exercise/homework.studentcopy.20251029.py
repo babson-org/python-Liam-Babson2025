@@ -10,3 +10,9 @@ Also, please prepare three questions you have on Python Notes Part 1 or Part 2 (
 -> week03/
 
 '''
+
+'''
+1. how do you use the insert function and what will we be inserting
+2. how do you allow so many possibile entries that can all be differnet
+
+'''

@@ -16,17 +16,6 @@ make_tea(steps)
 print(steps)
 
 # enter your code here
-Step1 = "boil water"
-step2 = "put tea bag in water"
-step3 = "let tea steep"
-step4 ="drink tea"
-def make_tea():
-    input("do you want to make tea, Yes or No?")
-    if input.lower == "Yes":
-        print(Step1,step2,step3,step4)
-    else:
-        print("No tea for you")
-        
 
 
 pause=input('pause')
@@ -46,8 +35,6 @@ for i in range(3):
 
 pause=input('pause')
 clear_screen()
-
-
 '''
 #3
 
@@ -125,13 +112,6 @@ print(txt.capitalize())
 print(txt.split())
 
 # enter your code here
-sentance = input("enter a sentance: ")
-print(sentance.upper)
-print(sentance.lower)
-print(sentance.capitalize)
-print(sentance.title)
-print(sentance.split)
-
 
 
 pause=input('pause')
@@ -172,10 +152,6 @@ Create a tuple with four numbers. Try to change the first number (observe the er
 and then print the tuple.
 '''
 # enter your code here
-list = (1,2,3,4,)
-list[0] = 7
-print(list)
-
 
 
 pause=input('pause')
@@ -187,13 +163,6 @@ Create a dictionary representing a student (name, age). Update the age. Create a
 favorite numbers and add a new number.
 '''
 # enter your code here
-student ={"name":"liam", "age": 19}
-student["age"] = 20
-print(student)
-favorite_numbers = [1,5,3,7,22]
-favorite_numbers.append(43)
-print(favorite_numbers)
-
 
 
 pause=input('pause')
@@ -206,19 +175,6 @@ and read it back to print it.
 '''
 # enter your code here
 
-quote =input("enter your favorite quote: ")
-
-with open("quotes.txt", "w") as file:
-    file.write(quote)
-
-with open("quote.txt", "r") as file:
-    saved_quote =file.read()
-
-print("\nQuote read from file")
-print(saved_quote)
-
-
-
 
 pause=input('pause')
 clear_screen()
@@ -227,15 +183,6 @@ clear_screen()
 Ask the user to input 5 numbers (one at a time), store them in a list, and print the sum and average.
 '''
 # enter your code here
-numbers =[]
-
-for i in range(5):
-    numb = float(input(f"enter number {i+1}: "))
-    numbers.append(numb)
-
-print("numbers: " + numbers)
-print("total: " + total)
-print("average: " + average)
 
 
 pause=input('pause')
