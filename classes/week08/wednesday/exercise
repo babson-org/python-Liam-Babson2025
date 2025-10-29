@@ -1,0 +1,15 @@
+class Shape:
+    def area(self):
+        print("Area not defined")
+
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+    
+    def area(self):
+        return self.side * self.side
+
+
+Shape().area()
+Square(5).area()
