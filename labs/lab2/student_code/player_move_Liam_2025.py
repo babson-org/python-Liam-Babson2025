@@ -9,20 +9,20 @@ def player_move(board: list[int], score: dict[str, int]):
     prompt = "Select an empty cell (1-9): "
     while True:
         try:
-            # Get input and convert to integer
-            move = int(input(prompt))
+             # Get input directly
+            move = int(input("Select an empty cell (1-9): "))
             
-            # Validate move is in range (1-9)
+            # Check if move is in valid range (1-9)
             if move < 1 or move > 9:
-                prompt = "Out of range. Try again (1-9): "
+                print("Invalid. Try again with an empty cell index (1-9): ", end='')
                 continue
             
-            # Convert to board index (1-9 becomes 0-8)
+            # Convert from 1-9 to index 0-8
             index = move - 1
             
-            # Check if the cell is available (not already taken)
+            # Check if this cell is already taken
             if abs(board[index]) == 10:
-                prompt = "Cell already taken. Try again (1-9): "
+                print("Invalid. Try again with an empty cell index (1-9): ", end='')
                 continue
             
             # Valid move found - break out of loop
