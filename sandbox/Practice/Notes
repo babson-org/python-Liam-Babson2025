@@ -1,0 +1,1693 @@
+
+## TABLE OF CONTENTS
+1. [Recursion](#recursion)
+2. [Object-Oriented Programming (OOP)](#oop)
+3. [Sorting Algorithms](#sorting)
+4. [Searching Algorithms](#searching)
+5. [Functional Programming (map, filter, reduce)](#functional)
+6. [Data Structures Deep Dive](#data-structures)
+7. [File I/O & JSON](#file-io)
+8. [Exception Handling](#exceptions)
+9. [String Processing](#strings)
+10. [Common Patterns & Tricks](#patterns)
+
+---
+
+<a name="recursion"></a>
+## 1. RECURSION - DEEP DIVE
+
+### Core Concept
+Recursion = function calls itself with a **smaller problem** until it reaches a **base case**
+
+### The Recipe (3 Steps)
+```python
+def recursive_function(problem):
+    # 1. BASE CASE - when to STOP recursing
+    if problem_is_trivial:
+        return simple_answer
+    
+    # 2. RECURSIVE CASE - break into smaller problem
+    smaller_problem = make_problem_smaller(problem)
+    
+    # 3. COMBINE - use result from smaller problem
+    return combine(current_step, recursive_function(smaller_problem))
+```
+
+### Example 1: Factorial
+```python
+def factorial(n):
+    # Base case
+    if n <= 1:
+        return 1
+    # Recursive case: n! = n × (n-1)!
+    return n * factorial(n - 1)
+
+# Trace: factorial(4)
+# 4 * factorial(3)
+#   3 * factorial(2)
+#     2 * factorial(1)
+#       return 1
+#     return 2 * 1 = 2
+#   return 3 * 2 = 6
+# return 4 * 6 = 24
+```
+
+### Example 2: Sum of List
+```python
+def sum_list(lst):
+    # Base case: empty list
+    if not lst:
+        return 0
+    # Recursive case: first + sum of rest
+    return lst[0] + sum_list(lst[1:])
+
+# sum_list([1, 2, 3, 4])
+# 1 + sum_list([2, 3, 4])
+#   2 + sum_list([3, 4])
+#     3 + sum_list([4])
+#       4 + sum_list([])
+#         return 0
+#       return 4 + 0 = 4
+#     return 3 + 4 = 7
+#   return 2 + 7 = 9
+# return 1 + 9 = 10
+```
+
+### Example 3: Countdown
+```python
+def countdown(n):
+    if n < 0:  # Base case
+        return
+    print(n)
+    countdown(n - 1)  # Recursive case
+
+countdown(3)  # Prints: 3, 2, 1, 0
+```
+
+### Example 4: Power Function
+```python
+def power(base, exp):
+    if exp == 0:  # Base case: anything^0 = 1
+        return 1
+    return base * power(base, exp - 1)
+
+# power(2, 3) = 2 * power(2, 2)
+#             = 2 * 2 * power(2, 1)
+#             = 2 * 2 * 2 * power(2, 0)
+#             = 2 * 2 * 2 * 1 = 8
+```
+
+### Example 5: Reverse String
+```python
+def reverse_string(s):
+    if len(s) <= 1:  # Base case
+        return s
+    # Last char + reverse of rest
+    return s[-1] + reverse_string(s[:-1])
+
+# reverse_string("hello")
+# 'o' + reverse_string("hell")
+#   'l' + reverse_string("hel")
+#     'l' + reverse_string("he")
+#       'e' + reverse_string("h")
+#         return 'h'
+#       return 'e' + 'h' = "eh"
+#     return 'l' + "eh" = "leh"
+#   return 'l' + "leh" = "lleh"
+# return 'o' + "lleh" = "olleh"
+```
+
+### Example 6: Fibonacci
+```python
+def fibonacci(n):
+    if n <= 1:  # Base cases
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+# fib(4)
+# fib(3) + fib(2)
+#   (fib(2) + fib(1)) + (fib(1) + fib(0))
+#     ((fib(1) + fib(0)) + 1) + (1 + 0)
+#       ((1 + 0) + 1) + 1
+#         (1 + 1) + 1
+#           2 + 1 = 3
+```
+
+### Example 7: Remove Consecutive Duplicates (FROM YOUR QUIZ)
+```python
+def remove_consecutive_duplicates(lst):
+    # Base case: 0 or 1 elements
+    if len(lst) <= 1:
+        return lst
+    
+    # If first two are same, skip first
+    if lst[0] == lst[1]:
+        return remove_consecutive_duplicates(lst[1:])
+    
+    # If different, keep first + recurse on rest
+    return [lst[0]] + remove_consecutive_duplicates(lst[1:])
+
+# [1,1,2,2,3] → [1,2,3]
+# lst[0]==lst[1] (1==1) → skip
+#   remove_consecutive_duplicates([1,2,2,3])
+#   lst[0]!=lst[1] (1!=2) → keep
+#     [1] + remove_consecutive_duplicates([2,2,3])
+#       lst[0]==lst[1] (2==2) → skip
+#         remove_consecutive_duplicates([2,3])
+#         lst[0]!=lst[1] (2!=3) → keep
+#           [2] + remove_consecutive_duplicates([3])
+#             len=1 → return [3]
+#           [2] + [3] = [2,3]
+#     [1] + [2,3] = [1,2,3]
+```
+
+### Example 8: Binary Search (Recursive)
+```python
+def binary_search_recursive(arr, target, low=0, high=None):
+    if high is None:
+        high = len(arr) - 1
+    
+    # Base case: not found
+    if low > high:
+        return -1
+    
+    mid = (low + high) // 2
+    
+    # Base case: found
+    if arr[mid] == target:
+        return mid
+    
+    # Recursive cases
+    if target < arr[mid]:
+        return binary_search_recursive(arr, target, low, mid - 1)
+    else:
+        return binary_search_recursive(arr, target, mid + 1, high)
+```
+
+### RECURSION KEY POINTS
+- ✅ **Always need base case** or infinite loop
+- ✅ **Problem must get smaller** each time
+- ✅ **When using lists:** slicing creates copies (inefficient)
+- ✅ **Better:** use indices instead of slicing
+- ✅ **Stack overflow:** too many recursive calls (usually >1000)
+- ✅ **List concatenation:** `[item] + list` not `item + list`
+
+---
+
+<a name="oop"></a>
+## 2. OBJECT-ORIENTED PROGRAMMING (OOP)
+
+### Classes and Objects - The Basics
+```python
+class Student:
+    # __init__ is the CONSTRUCTOR
+    def __init__(self, name, gpa):
+        self.name = name      # Instance variable
+        self.gpa = gpa        # Instance variable
+    
+    # Instance method
+    def display(self):
+        print(f"{self.name}: {self.gpa}")
+
+# Creating objects (instances)
+s1 = Student("Alice", 3.8)
+s2 = Student("Bob", 3.5)
+
+s1.display()  # Alice: 3.8
+```
+
+### The `self` Parameter
+- **`self`** = reference to the current instance
+- **First parameter** of ALL instance methods
+- Use `self.attribute` to access instance variables
+
+```python
+class Counter:
+    def __init__(self):
+        self.count = 0  # Instance variable
+    
+    def increment(self):
+        self.count += 1  # Access via self
+    
+    def get_count(self):
+        return self.count
+```
+
+### Class Variables vs Instance Variables
+```python
+class Dog:
+    species = "Canis familiaris"  # CLASS variable (shared by all)
+    
+    def __init__(self, name):
+        self.name = name  # INSTANCE variable (unique to each)
+
+dog1 = Dog("Max")
+dog2 = Dog("Buddy")
+
+print(dog1.species)  # Canis familiaris (shared)
+print(dog2.species)  # Canis familiaris (shared)
+print(dog1.name)     # Max (unique)
+print(dog2.name)     # Buddy (unique)
+
+# Change class variable affects ALL instances
+Dog.species = "Dog"
+print(dog1.species)  # Dog
+print(dog2.species)  # Dog
+```
+
+### Special Methods (Magic Methods)
+
+#### `__str__` - String Representation
+```python
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+    
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+
+book = Book("1984", "Orwell")
+print(book)  # Calls __str__ → "1984 by Orwell"
+```
+
+#### `__repr__` - Official Representation
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __repr__(self):
+        return f"Point({self.x}, {self.y})"
+
+p = Point(3, 4)
+print(p)  # Point(3, 4)
+```
+
+#### Comparison Methods - For Sorting
+```python
+class Student:
+    def __init__(self, name, gpa):
+        self.name = name
+        self.gpa = gpa
+    
+    # Less than (for sorting)
+    def __lt__(self, other):
+        return self.gpa < other.gpa
+    
+    # Equal to
+    def __eq__(self, other):
+        return self.gpa == other.gpa
+    
+    def __str__(self):
+        return f"{self.name}: {self.gpa}"
+
+students = [
+    Student("Alice", 3.5),
+    Student("Bob", 3.9),
+    Student("Charlie", 3.2)
+]
+
+students.sort()  # Uses __lt__ to sort
+for s in students:
+    print(s)
+# Charlie: 3.2
+# Alice: 3.5
+# Bob: 3.9
+```
+
+#### ALL Comparison Methods
+```python
+class Grade:
+    def __init__(self, score):
+        self.score = score
+    
+    def __lt__(self, other):   # 
+        return self.score < other.score
+    
+    def __le__(self, other):   # <=
+        return self.score <= other.score
+    
+    def __gt__(self, other):   # >
+        return self.score > other.score
+    
+    def __ge__(self, other):   # >=
+        return self.score >= other.score
+    
+    def __eq__(self, other):   # ==
+        return self.score == other.score
+    
+    def __ne__(self, other):   # !=
+        return self.score != other.score
+```
+
+### Inheritance - Creating Subclasses
+```python
+# Parent class (superclass)
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        return "Some sound"
+    
+    def info(self):
+        return f"I am {self.name}"
+
+# Child class (subclass)
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)  # Call parent constructor
+        self.breed = breed
+    
+    # Override parent method
+    def speak(self):
+        return "Woof!"
+    
+    # Add new method
+    def fetch(self):
+        return f"{self.name} is fetching!"
+
+# Child class
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+# Usage
+dog = Dog("Max", "Golden Retriever")
+print(dog.name)      # Max (from parent)
+print(dog.breed)     # Golden Retriever (from child)
+print(dog.speak())   # Woof! (overridden)
+print(dog.info())    # I am Max (inherited)
+print(dog.fetch())   # Max is fetching! (new method)
+
+cat = Cat("Whiskers")
+print(cat.speak())   # Meow!
+```
+
+### Composition - "Has-a" Relationship
+```python
+class Engine:
+    def __init__(self, horsepower):
+        self.horsepower = horsepower
+    
+    def start(self):
+        return "Engine started"
+
+class Car:
+    def __init__(self, model, horsepower):
+        self.model = model
+        self.engine = Engine(horsepower)  # Car HAS-A Engine
+    
+    def start(self):
+        return f"{self.model}: {self.engine.start()}"
+
+car = Car("Tesla", 500)
+print(car.start())  # Tesla: Engine started
+print(car.engine.horsepower)  # 500
+```
+
+### Class Inheriting from dict (YOUR QUIZ EXAMPLE)
+```python
+class Student(dict):
+    """Student class that IS a dictionary"""
+    
+    def __init__(self, data):
+        super().__init__(data)  # Initialize as dict
+    
+    def __lt__(self, other):
+        # Sort by GPA descending, then name ascending
+        if self['gpa'] != other['gpa']:
+            return self['gpa'] > other['gpa']  # Higher GPA first
+        return self['name'] < other['name']
+
+students = [
+    Student({'name': 'Bob', 'gpa': 3.7}),
+    Student({'name': 'Alice', 'gpa': 3.5}),
+    Student({'name': 'Charlie', 'gpa': 3.5})
+]
+
+students.sort()
+for s in students:
+    print(s['name'], s['gpa'])
+# Bob 3.7
+# Alice 3.5
+# Charlie 3.5
+```
+
+### Practical Example: Inventory System (FROM YOUR EXERCISES)
+```python
+class Item:
+    def __init__(self, name, quantity, price):
+        self.name = name
+        self.quantity = quantity
+        self.price = price
+    
+    def __str__(self):
+        return f"{self.name}: {self.quantity} @ ${self.price}"
+
+class Inventory:
+    def __init__(self):
+        self.items = {}  # Dictionary of name → Item
+    
+    def add_item(self, item):
+        self.items[item.name] = item
+    
+    def remove(self, name):
+        self.items.pop(name, None)
+    
+    def value(self):
+        return sum(item.quantity * item.price 
+                   for item in self.items.values())
+    
+    def most_valuable(self):
+        if not self.items:
+            return None
+        return max(self.items.values(), 
+                   key=lambda item: item.quantity * item.price)
+
+# Usage
+inv = Inventory()
+inv.add_item(Item("Chair", 5, 50.00))
+inv.add_item(Item("Desk", 2, 200.00))
+print(inv.value())  # 650.0
+print(inv.most_valuable())  # Desk: 2 @ $200.0
+```
+
+### OOP KEY POINTS
+- ✅ **`__init__`** = constructor, always takes `self` first
+- ✅ **`self`** = reference to instance, use for all instance variables
+- ✅ **`__str__`** = what `print()` shows
+- ✅ **`__lt__`** = enables sorting with `sorted()` or `.sort()`
+- ✅ **Inheritance:** `class Child(Parent):`
+- ✅ **super()** = call parent class methods
+- ✅ **Composition** = object contains another object
+
+---
+
+<a name="sorting"></a>
+## 3. SORTING ALGORITHMS
+
+### Built-in Sorting
+```python
+# sorted() - returns NEW sorted list
+nums = [3, 1, 4, 1, 5]
+sorted_nums = sorted(nums)
+print(sorted_nums)  # [1, 1, 3, 4, 5]
+print(nums)         # [3, 1, 4, 1, 5] (unchanged)
+
+# .sort() - sorts IN-PLACE, returns None
+nums.sort()
+print(nums)  # [1, 1, 3, 4, 5]
+
+# With key function
+students = [('Alice', 3.5), ('Bob', 3.9), ('Charlie', 3.2)]
+sorted_students = sorted(students, key=lambda x: x[1])  # Sort by GPA
+# [('Charlie', 3.2), ('Alice', 3.5), ('Bob', 3.9)]
+
+# Reverse order
+nums = [3, 1, 4, 1, 5]
+nums.sort(reverse=True)  # [5, 4, 3, 1, 1]
+```
+
+### Bubble Sort - O(n²)
+**Idea:** Repeatedly swap adjacent elements if they're in wrong order
+
+```python
+def bubble_sort(arr):
+    n = len(arr)
+    # Outer loop: number of passes
+    for i in range(n):
+        swapped = False
+        # Inner loop: compare adjacent elements
+        for j in range(n - 1 - i):  # -i because last i elements already sorted
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]  # Swap
+                swapped = True
+        # If no swaps, array is sorted
+        if not swapped:
+            break
+    return arr
+
+# Example
+arr = [64, 34, 25, 12, 22]
+bubble_sort(arr)
+print(arr)  # [12, 22, 25, 34, 64]
+
+# Visual trace:
+# [64, 34, 25, 12, 22]  # Start
+# [34, 64, 25, 12, 22]  # Swap 64 and 34
+# [34, 25, 64, 12, 22]  # Swap 64 and 25
+# [34, 25, 12, 64, 22]  # Swap 64 and 12
+# [34, 25, 12, 22, 64]  # Swap 64 and 22 (64 in place)
+# ... continues until sorted
+```
+
+### Selection Sort - O(n²)
+**Idea:** Find minimum element and put it at the beginning
+
+```python
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        # Find minimum in unsorted portion
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        # Swap minimum with first unsorted element
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
+
+# Example
+arr = [64, 25, 12, 22, 11]
+selection_sort(arr)
+print(arr)  # [11, 12, 22, 25, 64]
+```
+
+### Insertion Sort - O(n²)
+**Idea:** Build sorted array one element at a time
+
+```python
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        # Move elements greater than key one position ahead
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr
+
+# Example
+arr = [12, 11, 13, 5, 6]
+insertion_sort(arr)
+print(arr)  # [5, 6, 11, 12, 13]
+```
+
+### Merge Sort - O(n log n) ⭐ IMPORTANT
+**Idea:** Divide and conquer - split, sort, merge
+
+```python
+def merge_sort(arr):
+    # Base case
+    if len(arr) <= 1:
+        return arr
+    
+    # Divide
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    
+    # Conquer (merge)
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    
+    # Compare elements from left and right
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    
+    # Add remaining elements
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+# Example
+arr = [38, 27, 43, 3, 9, 82, 10]
+sorted_arr = merge_sort(arr)
+print(sorted_arr)  # [3, 9, 10, 27, 38, 43, 82]
+
+# Visual trace:
+# [38, 27, 43, 3, 9, 82, 10]
+#       Split into halves
+# [38, 27, 43, 3] | [9, 82, 10]
+#       Split again
+# [38, 27] [43, 3] | [9, 82] [10]
+#       Split again
+# [38] [27] [43] [3] | [9] [82] [10]
+#       Merge back up
+# [27, 38] [3, 43] | [9, 82] [10]
+#       Merge again
+# [3, 27, 38, 43] | [9, 10, 82]
+#       Final merge
+# [3, 9, 10, 27, 38, 43, 82]
+```
+
+### Quick Sort - O(n log n) average
+**Idea:** Pick pivot, partition around it
+
+```python
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    
+    return quick_sort(left) + middle + quick_sort(right)
+
+# Example
+arr = [3, 6, 8, 10, 1, 2, 1]
+sorted_arr = quick_sort(arr)
+print(sorted_arr)  # [1, 1, 2, 3, 6, 8, 10]
+```
+
+### Sorting Comparison Table
+| Algorithm | Best | Average | Worst | Space | Stable? |
+|-----------|------|---------|-------|-------|---------|
+| Bubble | O(n) | O(n²) | O(n²) | O(1) | Yes |
+| Selection | O(n²) | O(n²) | O(n²) | O(1) | No |
+| Insertion | O(n) | O(n²) | O(n²) | O(1) | Yes |
+| Merge | O(n log n) | O(n log n) | O(n log n) | O(n) | Yes |
+| Quick | O(n log n) | O(n log n) | O(n²) | O(log n) | No |
+
+---
+
+<a name="searching"></a>
+## 4. SEARCHING ALGORITHMS
+
+### Linear Search - O(n)
+```python
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+
+# Example
+arr = [5, 2, 8, 1, 9]
+print(linear_search(arr, 8))  # 2
+print(linear_search(arr, 3))  # -1
+```
+
+### Binary Search - O(log n) ⭐ IMPORTANT
+**Requirements:** Array MUST be sorted
+
+```python
+def binary_search(arr, target):
+    low = 0
+    high = len(arr) - 1
+    
+    while low <= high:  # <= not just 
+        mid = (low + high) // 2
+        
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    
+    return -1  # Not found
+
+# Example
+arr = [1, 3, 5, 7, 9, 11, 13]
+print(binary_search(arr, 7))   # 3
+print(binary_search(arr, 6))   # -1
+
+# Trace for target=7:
+# [1, 3, 5, 7, 9, 11, 13]
+#  L       M          H    mid=6, arr[6]=13 > 7, H=5
+# [1, 3, 5, 7, 9]
+#  L     M     H          mid=2, arr[2]=5 < 7, L=3
+#       [7, 9]
+#        L,M,H              mid=3, arr[3]=7 == 7, found!
+```
+
+### Binary Search - Recursive Version
+```python
+def binary_search_recursive(arr, target, low=0, high=None):
+    if high is None:
+        high = len(arr) - 1
+    
+    if low > high:
+        return -1
+    
+    mid = (low + high) // 2
+    
+    if arr[mid] == target:
+        return mid
+    elif arr[mid] < target:
+        return binary_search_recursive(arr, target, mid + 1, high)
+    else:
+        return binary_search_recursive(arr, target, low, mid - 1)
+```
+
+### Binary Search - Key Points
+- ✅ **Must be sorted**
+- ✅ **Use `low <= high`** (includes single element case)
+- ✅ **mid = (low + high) // 2**
+- ✅ **O(log n)** - very fast
+- ✅ **Works for 1 billion elements in ~30 steps**
+
+---
+
+<a name="functional"></a>
+## 5. FUNCTIONAL PROGRAMMING
+
+### map() - Apply Function to Each Element
+```python
+# Syntax: map(function, iterable)
+
+# Example 1: Square each number
+nums = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, nums))
+print(squared)  # [1, 4, 9, 16, 25]
+
+# Example 2: Convert to uppercase
+words = ['hello', 'world']
+upper = list(map(str.upper, words))
+print(upper)  # ['HELLO', 'WORLD']
+
+# Example 3: Multiple iterables
+nums1 = [1, 2, 3]
+nums2 = [4, 5, 6]
+sums = list(map(lambda x, y: x + y, nums1, nums2))
+print(sums)  # [5, 7, 9]
+
+# With named function
+def double(x):
+    return x * 2
+
+nums = [1, 2, 3]
+doubled = list(map(double, nums))
+print(doubled)  # [2, 4, 6]
+```
+
+### filter() - Keep Elements That Pass Test
+```python
+# Syntax: filter(function, iterable)
+
+# Example 1: Keep even numbers
+nums = [1, 2, 3, 4, 5, 6]
+evens = list(filter(lambda x: x % 2 == 0, nums))
+print(evens)  # [2, 4, 6]
+
+# Example 2: Keep positive numbers
+nums = [-2, -1, 0, 1, 2]
+positives = list(filter(lambda x: x > 0, nums))
+print(positives)  # [1, 2]
+
+# Example 3: Keep long words
+words = ['hi', 'hello', 'hey', 'goodbye']
+long_words = list(filter(lambda w: len(w) > 3, words))
+print(long_words)  # ['hello', 'goodbye']
+
+# With named function
+def is_even(x):
+    return x % 2 == 0
+
+nums = [1, 2, 3, 4, 5]
+evens = list(filter(is_even, nums))
+print(evens)  # [2, 4]
+```
+
+### reduce() - Combine All Elements to Single Value
+```python
+from functools import reduce
+
+# Syntax: reduce(function, iterable, initial_value)
+
+# Example 1: Sum all numbers
+nums = [1, 2, 3, 4, 5]
+total = reduce(lambda x, y: x + y, nums)
+print(total)  # 15
+# Process: ((((1 + 2) + 3) + 4) + 5) = 15
+
+# Example 2: Product (YOUR EXERCISE)
+def multiply(a, b):
+    return a * b
+
+nums = [2, 3, 4, 5]
+product = reduce(multiply, nums)
+print(product)  # 120
+# Process: ((2 * 3) * 4) * 5 = 120
+
+# Example 3: Find maximum
+nums = [3, 7, 2, 9, 1]
+maximum = reduce(lambda x, y: x if x > y else y, nums)
+print(maximum)  # 9
+
+# Example 4: Longest string (YOUR EXERCISE)
+def longer_string(a, b):
+    return a if len(a) >= len(b) else b
+
+words = ['cat', 'elephant', 'dog', 'butterfly']
+longest = reduce(longer_string, words)
+print(longest)  # butterfly
+
+# Example 5: Concatenate with spaces (YOUR EXERCISE)
+def concat_with_space(a, b):
+    return a + ' ' + b
+
+words = ['Python', 'is', 'awesome']
+sentence = reduce(concat_with_space, words)
+print(sentence)  # Python is awesome
+
+# With initial value
+nums = [1, 2, 3]
+total = reduce(lambda x, y: x + y, nums, 10)
+print(total)  # 16 (starts with 10)
+```
+
+### Combining map, filter, reduce
+```python
+from functools import reduce
+
+# Get sum of squares of even numbers
+nums = [1, 2, 3, 4, 5, 6]
+
+result = reduce(
+    lambda x, y: x + y,           # Sum
+    map(
+        lambda x: x**2,            # Square
+        filter(
+            lambda x: x % 2 == 0,  # Keep evens
+            nums
+        )
+    )
+)
+print(result)  # 56
+# Process: 2² + 4² + 6² = 4 + 16 + 36 = 56
+
+# More readable version
+evens = filter(lambda x: x % 2 == 0, nums)  # [2, 4, 6]
+squared = map(lambda x: x**2, evens)         # [4, 16, 36]
+total = reduce(lambda x, y: x + y, squared)  # 56
+```
+
+### List Comprehension vs map/filter
+```python
+nums = [1, 2, 3, 4, 5]
+
+# Using map
+squared = list(map(lambda x: x**2, nums))
+
+# Using list comprehension (often preferred)
+squared = [x**2 for x in nums]
+
+# Using filter
+evens = list(filter(lambda x: x % 2 == 0, nums))
+
+# Using list comprehension
+evens = [x for x in nums if x % 2 == 0]
+
+# Combined
+even_squares = [x**2 for x in nums if x % 2 == 0]
+```
+
+---
+
+<a name="data-structures"></a>
+## 6. DATA STRUCTURES DEEP DIVE
+
+### Lists - Mutable, Ordered
+```python
+# Creating
+lst = [1, 2, 3]
+lst = list(range(5))  # [0, 1, 2, 3, 4]
+
+# Adding
+lst.append(4)         # Add to end
+lst.insert(0, 0)      # Insert at index
+lst.extend([5, 6])    # Add multiple
+
+# Removing
+lst.pop()             # Remove and return last
+lst.pop(0)            # Remove at index
+lst.remove(3)         # Remove first occurrence of value
+del lst[0]            # Delete by index
+
+# Accessing
+first = lst[0]
+last = lst[-1]
+sub = lst[1:3]        # Slicing
+
+# Modifying
+lst[0] = 100
+lst[1:3] = [20, 30]
+
+# Useful methods
+lst.sort()            # Sort in-place
+lst.reverse()         # Reverse in-place
+lst.clear()           # Remove all
+count = lst.count(2)  # Count occurrences
+idx = lst.index(3)    # Find index
+
+# List comprehension
+squares = [x**2 for x in range(5)]
+evens = [x for x in range(10) if x % 2 == 0]
+```
+
+### Tuples - Immutable, Ordered
+```python
+# Creating
+tup = (1, 2, 3)
+tup = 1, 2, 3         # Parentheses optional
+single = (1,)         # Comma needed for single element
+
+# Accessing (same as lists)
+first = tup[0]
+sub = tup[1:3]
+
+# Can't modify!
+# tup[0] = 10         # TypeError
+
+# Unpacking
+x, y, z = tup
+a, *rest = (1, 2, 3, 4)  # a=1, rest=[2,3,4]
+
+# Use cases
+coordinates = (10, 20)
+return_multiple = lambda: (1, 2, 3)
+```
+
+### Dictionaries - Key-Value Pairs
+```python
+# Creating
+d = {'name': 'Alice', 'age': 25}
+d = dict(name='Alice', age=25)
+
+# Adding/Modifying
+d['city'] = 'Boston'
+d['age'] = 26
+
+# Accessing
+name = d['name']              # KeyError if missing
+age = d.get('age')            # Returns None if missing
+age = d.get('age', 0)         # Returns 0 if missing
+
+# Removing
+del d['age']
+value = d.pop('name')         # Remove and return
+d.clear()                     # Remove all
+
+# Checking
+if 'name' in d:
+    print(d['name'])
+
+# Iteration
+for key in d:                 # Just keys
+    print(key)
+
+for key, value in d.items():  # Key-value pairs
+    print(key, value)
+
+for value in d.values():      # Just values
+    print(value)
+
+# Dictionary comprehension
+squares = {x: x**2 for x in range(5)}
+# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# Useful methods
+keys = d.keys()               # All keys
+values = d.values()           # All values
+items = d.items()             # Key-value pairs
+d.update({'x': 1, 'y': 2})    # Merge dictionaries
+```
+
+### Sets - Unordered, Unique Elements
+```python
+# Creating
+s = {1, 2, 3}
+s = set([1, 2, 2, 3])         # {1, 2, 3} - duplicates removed
+empty = set()                 # NOT {} (that's dict)
+
+# Adding
+s.add(4)
+s.update([5, 6])
+
+# Removing
+s.remove(1)                   # KeyError if missing
+s.discard(1)                  # No error if missing
+s.pop()                       # Remove arbitrary element
+
+# Set operations
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+union = a | b                 # {1, 2, 3, 4, 5}
+intersection = a & b          # {3}
+difference = a - b            # {1, 2}
+symmetric_diff = a ^ b        # {1, 2, 4, 5}
+
+# Checking membership (FAST - O(1))
+if 2 in s:
+    print("Found!")
+
+# Use cases: removing duplicates
+nums = [1, 2, 2, 3, 3, 3]
+unique = list(set(nums))      # [1, 2, 3]
+```
+
+### Strings - Immutable Sequences
+```python
+s = "Hello World"
+
+# Accessing
+first = s[0]                  # 'H'
+last = s[-1]                  # 'd'
+sub = s[0:5]                  # 'Hello'
+
+# Can't modify!
+# s[0] = 'h'                  # TypeError
+
+# Methods (return NEW strings)
+upper = s.upper()             # 'HELLO WORLD'
+lower = s.lower()             # 'hello world'
+stripped = "  hi  ".strip()   # 'hi'
+replaced = s.replace('o', 'a') # 'Hella Warld'
+split = s.split()             # ['Hello', 'World']
+joined = '-'.join(['a', 'b']) # 'a-b'
+
+# Checking
+if 'Hello' in s:
+    print("Found!")
+
+s.startswith('Hello')         # True
+s.endswith('World')           # True
+s.isdigit()                   # False
+s.isalpha()                   # False (space)
+s.isalnum()                   # False
+
+# Formatting
+name = "Alice"
+age = 25
+f"My name is {name} and I'm {age}"
+"My name is {} and I'm {}".format(name, age)
+```
+
+---
+
+<a name="file-io"></a>
+## 7. FILE I/O & JSON
+
+### Reading Files
+```python
+# Method 1: with statement (recommended)
+with open('file.txt', 'r') as f:
+    content = f.read()        # Read entire file as string
+
+with open('file.txt', 'r') as f:
+    lines = f.readlines()     # List of lines (with \n)
+
+with open('file.txt', 'r') as f:
+    for line in f:            # Iterate line by line (memory efficient)
+        print(line.strip())
+
+# Method 2: Manual (must close!)
+f = open('file.txt', 'r')
+content = f.read()
+f.close()
+```
+
+### Writing Files
+```python
+# Write (overwrites existing)
+with open('file.txt', 'w') as f:
+    f.write('Hello World\n')
+    f.write('Second line\n')
+
+# Append (adds to end)
+with open('file.txt', 'a') as f:
+    f.write('New line\n')
+
+# Write multiple lines
+lines = ['Line 1\n', 'Line 2\n', 'Line 3\n']
+with open('file.txt', 'w') as f:
+    f.writelines(lines)
+```
+
+### JSON - Save/Load Structured Data
+```python
+import json
+
+# Python object to JSON string
+data = {'name': 'Alice', 'age': 25, 'courses': ['Math', 'CS']}
+json_string = json.dumps(data)
+print(json_string)  # '{"name": "Alice", "age": 25, ...}'
+
+# JSON string to Python object
+json_string = '{"name": "Bob", "age": 30}'
+data = json.loads(json_string)
+print(data['name'])  # Bob
+
+# Write to JSON file
+data = {'students': [
+    {'name': 'Alice', 'gpa': 3.8},
+    {'name': 'Bob', 'gpa': 3.5}
+]}
+
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=2)  # indent for readability
+
+# Read from JSON file
+with open('data.json', 'r') as f:
+    data = json.load(f)
+    print(data['students'][0]['name'])  # Alice
+```
+
+### CSV Files
+```python
+import csv
+
+# Reading CSV
+with open('data.csv', 'r') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)  # row is a list
+
+# Reading CSV as dictionary
+with open('data.csv', 'r') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row['name'], row['age'])
+
+# Writing CSV
+data = [
+    ['Name', 'Age', 'City'],
+    ['Alice', 25, 'Boston'],
+    ['Bob', 30, 'NYC']
+]
+
+with open('output.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(data)
+```
+
+### File Checking
+```python
+import os
+
+# Check if file exists
+if os.path.exists('file.txt'):
+    print("File exists")
+
+# Check if it's a file or directory
+os.path.isfile('file.txt')
+os.path.isdir('folder')
+
+# Get file size
+size = os.path.getsize('file.txt')
+
+# Delete file
+os.remove('file.txt')
+```
+
+---
+
+<a name="exceptions"></a>
+## 8. EXCEPTION HANDLING
+
+### Basic try-except
+```python
+try:
+    x = int(input("Enter number: "))
+    result = 10 / x
+    print(result)
+except ValueError:
+    print("Invalid number!")
+except ZeroDivisionError:
+    print("Can't divide by zero!")
+```
+
+### Catching Multiple Exceptions
+```python
+# Same handling for multiple exceptions
+try:
+    # code
+except (ValueError, TypeError):
+    print("Value or type error!")
+
+# Different handling
+try:
+    # code
+except ValueError:
+    print("Value error!")
+except TypeError:
+    print("Type error!")
+```
+
+### Catching All Exceptions
+```python
+try:
+    # code
+except Exception as e:
+    print(f"Error: {e}")
+```
+
+### try-except-else-finally
+```python
+try:
+    f = open('file.txt', 'r')
+    content = f.read()
+except FileNotFoundError:
+    print("File not found!")
+else:
+    # Runs if NO exception
+    print("File read successfully")
+finally:
+    # ALWAYS runs (cleanup)
+    if 'f' in locals():
+        f.close()
+```
+
+### Raising Exceptions
+```python
+def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
+
+try:
+    result = divide(10, 0)
+except ValueError as e:
+    print(e)  # Cannot divide by zero
+```
+
+### Common Exceptions
+```python
+# ValueError: invalid value
+int("abc")
+
+# TypeError: wrong type
+"string" + 5
+
+# KeyError: missing dictionary key
+d = {'a': 1}
+d['b']
+
+# IndexError: list index out of range
+lst = [1, 2]
+lst[5]
+
+# FileNotFoundError: file doesn't exist
+open('missing.txt')
+
+# ZeroDivisionError: division by zero
+10 / 0
+
+# AttributeError: invalid attribute
+"string".invalid_method()
+```
+
+---
+
+<a name="strings"></a>
+## 9. STRING PROCESSING
+
+### String Methods
+```python
+s = "Hello World"
+
+# Case
+s.upper()              # 'HELLO WORLD'
+s.lower()              # 'hello world'
+s.capitalize()         # 'Hello world'
+s.title()              # 'Hello World'
+
+# Checking
+s.startswith('Hello')  # True
+s.endswith('ld')       # True
+s.isdigit()            # False
+s.isalpha()            # False (space)
+s.isalnum()            # False
+s.islower()            # False
+s.isupper()            # False
+
+# Searching
+s.find('World')        # 6 (index)
+s.find('xyz')          # -1 (not found)
+s.index('World')       # 6 (raises error if not found)
+s.count('l')           # 3
+
+# Modifying (returns new string)
+s.replace('World', 'Python')  # 'Hello Python'
+s.strip()              # Remove whitespace from ends
+s.lstrip()             # Remove from left
+s.rstrip()             # Remove from right
+
+# Splitting/Joining
+words = s.split()      # ['Hello', 'World']
+s.split('o')           # ['Hell', ' W', 'rld']
+'-'.join(['a', 'b'])   # 'a-b'
+
+# Padding
+'hi'.center(10)        # '    hi    '
+'hi'.ljust(10)         # 'hi        '
+'hi'.rjust(10)         # '        hi'
+'hi'.zfill(5)          # '000hi'
+```
+
+### String Slicing
+```python
+s = "Hello World"
+
+s[0]                   # 'H'
+s[-1]                  # 'd'
+s[0:5]                 # 'Hello'
+s[:5]                  # 'Hello'
+s[6:]                  # 'World'
+s[::2]                 # 'HloWrd' (every 2nd char)
+s[::-1]                # 'dlroW olleH' (reverse)
+```
+
+### String Formatting
+```python
+name = "Alice"
+age = 25
+
+# f-strings (Python 3.6+) - BEST
+f"My name is {name} and I'm {age}"
+f"{name.upper()}"      # Can use expressions
+f"{age:03d}"           # '025' (padding)
+f"{3.14159:.2f}"       # '3.14' (decimal places)
+
+# .format()
+"My name is {} and I'm {}".format(name, age)
+"My name is {0} and I'm {1}".format(name, age)
+"My name is {n} and I'm {a}".format(n=name, a=age)
+
+# % operator (old style)
+"My name is %s and I'm %d" % (name, age)
+```
+
+### Character Operations
+```python
+# ord() - character to ASCII
+ord('A')               # 65
+ord('a')               # 97
+ord('0')               # 48
+
+# chr() - ASCII to character
+chr(65)                # 'A'
+chr(97)                # 'a'
+
+# Checking characters
+'A'.isalpha()          # True
+'5'.isdigit()          # True
+' '.isspace()          # True
+'a'.islower()          # True
+'A'.isupper()          # True
+```
+
+### Caesar Cipher Example (YOUR EXERCISE)
+```python
+def caesar_decode(msg, shift):
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    decoded = ''
+    
+    for char in msg:
+        if char.isalpha():
+            # Find position in alphabet
+            idx = alphabet.index(char.lower())
+            # Shift (with wraparound)
+            new_idx = (idx - shift) % 26
+            # Get new character
+            decoded += alphabet[new_idx]
+        else:
+            # Keep non-alphabetic characters
+            decoded += char
+    
+    return decoded
+```
+
+---
+
+<a name="patterns"></a>
+## 10. COMMON PATTERNS & TRICKS
+
+### Two Pointers
+```python
+# Check if palindrome
+def is_palindrome(s):
+    left, right = 0, len(s) - 1
+    while left < right:
+        if s[left] != s[right]:
+            return False
+        left += 1
+        right -= 1
+    return True
+
+# Two sum (sorted array)
+def two_sum_sorted(arr, target):
+    left, right = 0, len(arr) - 1
+    while left < right:
+        current = arr[left] + arr[right]
+        if current == target:
+            return (left, right)
+        elif current < target:
+            left += 1
+        else:
+            right -= 1
+    return None
+```
+
+### Hash Table (Dictionary) for O(1) Lookup
+```python
+# Two sum (YOUR EXERCISE)
+def two_sum(lst, target):
+    seen = {}
+    for i, x in enumerate(lst):
+        complement = target - x
+        if complement in seen:
+            return (seen[complement], i)
+        seen[x] = i
+    return None
+
+# Count frequency
+def count_frequency(lst):
+    freq = {}
+    for item in lst:
+        freq[item] = freq.get(item, 0) + 1
+    return freq
+```
+
+### Sliding Window
+```python
+# Maximum sum of k consecutive elements
+def max_sum_subarray(arr, k):
+    window_sum = sum(arr[:k])
+    max_sum = window_sum
+    
+    for i in range(k, len(arr)):
+        window_sum = window_sum - arr[i - k] + arr[i]
+        max_sum = max(max_sum, window_sum)
+    
+    return max_sum
+```
+
+### Stack Pattern
+```python
+# Balanced brackets (YOUR EXERCISE)
+def is_balanced(s):
+    stack = []
+    pairs = {')': '(', ']': '[', '}': '{'}
+    
+    for ch in s:
+        if ch in '([{':
+            stack.append(ch)
+        elif ch in ')]}':
+            if not stack or stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+    
+    return len(stack) == 0
+```
+
+### Enumerate for Index + Value
+```python
+# Instead of:
+for i in range(len(lst)):
+    print(i, lst[i])
+
+# Use:
+for i, value in enumerate(lst):
+    print(i, value)
+
+# Start from different index
+for i, value in enumerate(lst, start=1):
+    print(i, value)
+```
+
+### Zip for Parallel Iteration
+```python
+names = ['Alice', 'Bob', 'Charlie']
+ages = [25, 30, 35]
+
+for name, age in zip(names, ages):
+    print(f"{name} is {age}")
+```
+
+### Any and All
+```python
+nums = [2, 4, 6, 8]
+
+# Check if any odd
+has_odd = any(x % 2 != 0 for x in nums)  # False
+
+# Check if all even
+all_even = all(x % 2 == 0 for x in nums)  # True
+
+# Empty cases
+any([])  # False
+all([])  # True
+```
+
+### Min/Max with Key
+```python
+students = [
+    {'name': 'Alice', 'gpa': 3.5},
+    {'name': 'Bob', 'gpa': 3.9},
+    {'name': 'Charlie', 'gpa': 3.2}
+]
+
+# Find student with highest GPA
+best = max(students, key=lambda s: s['gpa'])
+print(best)  # {'name': 'Bob', 'gpa': 3.9}
+
+# Find longest string
+words = ['cat', 'elephant', 'dog']
+longest = max(words, key=len)  # 'elephant'
+```
+
+### Swap Without Temp Variable
+```python
+a, b = 5, 10
+a, b = b, a  # Swap
+print(a, b)  # 10, 5
+```
+
+### Multiple Assignment
+```python
+x, y, z = 1, 2, 3
+
+# With unpacking
+first, *rest, last = [1, 2, 3, 4, 5]
+# first=1, rest=[2,3,4], last=5
+```
+
+### Ternary Operator
+```python
+# Instead of:
+if x > 0:
+    result = "positive"
+else:
+    result = "non-positive"
+
+# Use:
+result = "positive" if x > 0 else "non-positive"
+```
+
+### Default Dictionary
+```python
+from collections import defaultdict
+
+# Regular dict - need to check if key exists
+freq = {}
+for char in "hello":
+    if char not in freq:
+        freq[char] = 0
+    freq[char] += 1
+
+# defaultdict - automatic default value
+freq = defaultdict(int)  # default value is 0
+for char in "hello":
+    freq[char] += 1  # No need to check!
+```
+
+---
+
+## QUICK REFERENCE FORMULAS
+
+### Time Complexity
+- **O(1)**: Constant - dict/set lookup, array access
+- **O(log n)**: Binary search, balanced tree operations
+- **O(n)**: Linear search, single loop
+- **O(n log n)**: Merge sort, quick sort (average)
+- **O(n²)**: Nested loops, bubble/selection/insertion sort
+- **O(2ⁿ)**: Recursive fibonacci (naive)
+
+### Common Operations Complexity
+```python
+# List
+append: O(1)
+insert(0, x): O(n)
+pop(): O(1)
+pop(0): O(n)
+index(x): O(n)
+x in lst: O(n)
+
+# Dictionary/Set
+add/insert: O(1)
+lookup: O(1)
+delete: O(1)
+x in dict/set: O(1)
+```
+
+### Modulo Tricks
+```python
+# Circular array wraparound
+next_idx = (current_idx + 1) % len(arr)
+
+# Check even/odd
+is_even = x % 2 == 0
+
+# Get last digit
+last_digit = num % 10
+
+# Base conversion
+remainder = num % base
+```
+
+---
+
+## EXAM STRATEGIES
+
+### 1. Read Problem Carefully
+- What's the input format?
+- What's the output format?
+- Any edge cases mentioned?
+- Can I modify the input?
+
+### 2. Plan Before Coding
+- What data structure fits best?
+- Do I need sorting?
+- Is recursion appropriate?
+- What's the time complexity requirement?
+
+### 3. Start Simple
+- Write basic structure first
+- Handle edge cases
+- Test with examples
+- Then optimize
+
+### 4. Common Mistakes to Avoid
+- ❌ Forgetting base case in recursion
+- ❌ Off-by-one errors in loops
+- ❌ Modifying list while iterating
+- ❌ Forgetting `self` in class methods
+- ❌ Using `=` instead of `==`
+- ❌ Not initializing variables before use
+- ❌ Mixing tabs and spaces
+
+### 5. Testing Checklist
+- ✅ Empty input
+- ✅ Single element
+- ✅ All same elements
+- ✅ Already sorted
+- ✅ Reverse sorted
+- ✅ Duplicates
